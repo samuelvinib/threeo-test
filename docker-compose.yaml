@@ -5,6 +5,10 @@ services:
     build:
       context: ./frontend
       dockerfile: docker/Dockerfile
+    volumes:
+      - ./frontend:/app
+    environment:
+      CHOKIDAR_USEPOLLING: 'true'
     ports:
       - "3001:3000"
     depends_on:
@@ -14,10 +18,14 @@ services:
     build:
       context: ./api
       dockerfile: docker/Dockerfile
+    volumes:
+      - ./api:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: "mysql://root:password@mysql:3306/test_db"
+      CHOKIDAR_USEPOLLING: 'true'
     depends_on:
       - mysql
 
