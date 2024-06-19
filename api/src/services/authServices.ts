@@ -1,12 +1,10 @@
 // /src/services/authServices.ts
-import { PrismaClient, User as PrismaUser } from '@prisma/client';
+import { User as PrismaUser } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { secret } from '../config/secret';
 import JwtToken from '../models/JwtToken';
 import User from "../models/User";
-
-const prisma = new PrismaClient();
 
 export class AuthService {
     async register(email: string, password: string): Promise<PrismaUser> {
@@ -22,16 +20,14 @@ export class AuthService {
 
         const passwordMatch = await bcrypt.compare(password, user.password);
 
-        console.log(passwordMatch);
         if (!passwordMatch) {
             throw new Error('Invalid credentials');
         }
 
         const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });
-        console.log(typeof user.id)
         await this.saveToken(user.id, token);
 
-        return token;
+        return `Bearer ${token}`;
     }
 
     private async saveToken(userId: number, token: string): Promise<void> {

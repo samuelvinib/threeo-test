@@ -1,15 +1,12 @@
 import express from 'express';
 import authRoutes from './routes/authRoutes';
-import {authMiddleware} from "./middlewares/AuthMiddleware";
+import mathRoutes from "./routes/mathRoutes";
 
 const app = express();
 
 app.use(express.json());
 app.use('/auth', authRoutes);
-
-app.get('/', authMiddleware, (req: express.Request, res: express.Response) => {
-    res.send(`Hello, user ${req.userId}`);
-});
+app.use('/calculate', mathRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
