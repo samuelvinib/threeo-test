@@ -1,16 +1,23 @@
 import express from 'express';
-const authRoutes = express();
-import AuthController from "../controllers/auth";
+import AuthController from '../controllers/auth';
+
+const authRoutes = express.Router();
 const authController = new AuthController();
 
-authRoutes.post('/login', (req, res) => {
+authRoutes.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(401).send({
-            error: 'Email and password is required'
-        })
+            error: 'Email and password are required'
+        });
     }
-    return authController.login(email, password);
+
+    try {
+        const response = authController.login(email, password);
+        res.status(200).send(response);
+    } catch (error:any) {
+        res.status(500).send({ error: error.message });
+    }
 });
 
 export default authRoutes;
