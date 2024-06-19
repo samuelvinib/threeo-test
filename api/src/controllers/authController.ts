@@ -1,24 +1,41 @@
+// /src/controllers/AuthController.ts
 import { Request, Response } from 'express';
-import * as authService from '../services/authServices';
+import { AuthService } from '../services/authServices';
 
-export const register = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+export class AuthController {
+    private static instance: AuthController;
+    private authService: AuthService;
 
-    try {
-        await authService.register(username, password);
-        res.status(201).send('User registered');
-    } catch (error: any) {
-        res.status(500).send(error.message);
+    private constructor() {
+        this.authService = new AuthService();
     }
-};
 
-export const login = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-
-    try {
-        const token = await authService.login(username, password);
-        res.json({ token });
-    } catch (error: any) {
-        res.status(401).send(error.message);
+    public static getInstance(): AuthController {
+        if (!AuthController.instance) {
+            AuthController.instance = new AuthController();
+        }
+        return AuthController.instance;
     }
-};
+
+    public async register(req: Request, res: Response): Promise<void> {
+        const { email, password } = req.body;
+
+        try {
+            await this.authService.register(email, password);
+            res.status(201).send({ message: 'User registered' });
+        } catch (error: any) {
+            res.status(500).send(error.message);
+        }
+    }
+
+    public async login(req: Request, res: Response): Promise<void> {
+        const { email, password } = req.body;
+
+        try {
+            const token = await this.authService.login(email, password);
+            res.json({ token });
+        } catch (error: any) {
+            res.status(401).send(error.message);
+        }
+    }
+}

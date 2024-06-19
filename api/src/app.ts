@@ -1,13 +1,14 @@
 import express from 'express';
 import authRoutes from './routes/authRoutes';
+import {authMiddleware} from "./middlewares/AuthMiddleware";
 
 const app = express();
 
 app.use(express.json());
 app.use('/auth', authRoutes);
 
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.status(200).send('Welcome');
+app.get('/', authMiddleware, (req: express.Request, res: express.Response) => {
+    res.send(`Hello, user ${req.userId}`);
 });
 
 app.listen(3000, () => {

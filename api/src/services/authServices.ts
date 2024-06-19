@@ -1,29 +1,41 @@
-import bcrypt from 'bcryptjs';
+// /src/services/authServices.ts
+import { PrismaClient, User as PrismaUser } from '@prisma/client';
 import jwt from 'jsonwebtoken';
-import {PrismaClient} from '@prisma/client';
+import bcrypt from 'bcryptjs';
+import { secret } from '../config/secret';
+import JwtToken from '../models/JwtToken';
+import User from "../models/User";
 
 const prisma = new PrismaClient();
-const secret = 'your_secret_key';
 
-export const register = async (username: string, password: string) => {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    return await prisma.user.create({
-        data: {
-            username,
-            password: hashedPassword,
-        },
-    });
-};
-
-export const login = async (username: string, password: string) => {
-    const user = await prisma.user.findUnique({
-        where: { username },
-    });
-
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        throw new Error('Invalid credentials');
+export class AuthService {
+    async register(email: string, password: string): Promise<PrismaUser> {
+        return User.create(email, password);
     }
 
-    return jwt.sign({id: user.id}, secret, {expiresIn: '1h'});
-};
+    async login(email: string, password: string): Promise<string> {
+        const user = await User.findByEmail(email);
+
+        if (!user) {
+            throw new Error('Invalid credentials');
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        console.log(passwordMatch);
+        if (!passwordMatch) {
+            throw new Error('Invalid credentials');
+        }
+
+        const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });
+        console.log(typeof user.id)
+        await this.saveToken(user.id, token);
+
+        return token;
+    }
+
+    private async saveToken(userId: number, token: string): Promise<void> {
+        await JwtToken.create(token, userId, (new Date(Date.now() + 60 * 60 * 1000)),
+    );
+    }
+}
