@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 
 networks:
   app_network:
@@ -22,6 +22,7 @@ services:
       - app_network
 
   api:
+    container_name: threeo-test-api
     build:
       context: ./api
       dockerfile: docker/Dockerfile
