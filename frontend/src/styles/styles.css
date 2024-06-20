@@ -115,3 +115,7 @@ body {
     justify-content: space-between;
     margin-top: 15px;
 }
+
+.result{
+    text-align: center;
+}

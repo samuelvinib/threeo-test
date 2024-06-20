@@ -54,9 +54,8 @@ const Calculator: React.FC = () => {
                         <button onClick={() => handleOperation('divide')}>Divide</button>
                     </div>
                 </div>
-
-                {result !== null && <div>Result: {result}</div>}
             </div>
+            <p className='result'>{result !== null && <div>Result: {result}</div>}</p>
         </div>
     );
 };
