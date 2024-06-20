@@ -7,6 +7,7 @@ COPY package*.json ./
 RUN npm install ts-node-dev -g
 RUN npm install
 
+
 COPY . .
 
 RUN npx prisma generate

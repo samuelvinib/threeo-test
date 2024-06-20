@@ -3,6 +3,7 @@ import { login } from '../services/authServices';
 import { LoginProps } from '../types';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from "./common/Header";
+import '../styles/styles.css';
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const [username, setUsername] = useState('');

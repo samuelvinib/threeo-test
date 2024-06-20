@@ -1,16 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/App.css';
+import {getCurrentUser, logout} from "../../services/authServices";
+
 
 const Header = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
+    const isLoggedIn = getCurrentUser() !== null;
+
     return (
         <header>
-            <h1>My App</h1>
+            <h1>Teste Threeo IT</h1>
             <nav>
                 <ul>
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/calculator">Calculator</Link></li>
-                    <li><Link to="/login">Login</Link></li>
+                    {isLoggedIn ? (
+                        <>
+                            <li><button onClick={handleLogout}>Logout</button></li>
+                        </>
+                    ) : (
+                        <li><Link to="/login">Login</Link></li>
+                    )}
                 </ul>
             </nav>
         </header>

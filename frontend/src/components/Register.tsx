@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { register } from '../services/authServices';
 import { useNavigate } from 'react-router-dom';
 import Header from "./common/Header";
+import '../styles/styles.css';
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');

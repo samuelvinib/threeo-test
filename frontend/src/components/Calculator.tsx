@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import Header from "./common/Header";
+import '../styles/styles.css';
 
 const Calculator: React.FC = () => {
     const [value1, setValue1] = useState<number | string>('');
@@ -15,8 +16,11 @@ const Calculator: React.FC = () => {
                 operation,
             },);
             setResult(response.data.result);
-        } catch (error) {
-            alert('Calculation failed. Please try again.');
+        } catch (error:any) {
+            if (error.response.status === 401) {
+                alert('psé amigo');
+            }
+            alert(error.message);
         }
     };
 
