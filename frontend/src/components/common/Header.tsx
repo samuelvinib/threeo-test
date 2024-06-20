@@ -18,11 +18,10 @@ const Header = () => {
             <h1>Teste Threeo IT</h1>
             <nav>
                 <ul>
-                    <li><Link to="/">Home</Link></li>
                     <li><Link to="/calculator">Calculator</Link></li>
                     {isLoggedIn ? (
                         <>
-                            <li><button onClick={handleLogout}>Logout</button></li>
+                            <li><button onClick={handleLogout}>LOGOUT</button></li>
                         </>
                     ) : (
                         <li><Link to="/login">Login</Link></li>

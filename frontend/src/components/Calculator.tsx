@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import Header from "./common/Header";
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
+import { logout } from "../services/authServices";
 
 const Calculator: React.FC = () => {
+    const navigate = useNavigate();
     const [value1, setValue1] = useState<number | string>('');
     const [value2, setValue2] = useState<number | string>('');
     const [result, setResult] = useState<number | null>(null);
@@ -16,36 +19,44 @@ const Calculator: React.FC = () => {
                 operation,
             },);
             setResult(response.data.result);
-        } catch (error:any) {
+        } catch (error: any) {
             if (error.response.status === 401) {
-                alert('psé amigo');
+                logout();
+                navigate('/login');
+                alert('unauthenticated user');
+            } else {
+                alert(error.message);
             }
-            alert(error.message);
         }
     };
 
     return (
-            <div>
-                <Header />
+        <div>
+            <Header />
+            <div className="center-container">
                 <div>
-                <input
-                    type="number"
-                    value={value1}
-                    onChange={(e) => setValue1(e.target.value)}
-                />
-                <input
-                    type="number"
-                    value={value2}
-                    onChange={(e) => setValue2(e.target.value)}
-                />
+                    <div>
+                        <input
+                            type="number"
+                            value={value1}
+                            onChange={(e) => setValue1(e.target.value)}
+                        />
+                        <input
+                            type="number"
+                            value={value2}
+                            onChange={(e) => setValue2(e.target.value)}
+                        />
+                    </div>
+                    <div className="center-buttons">
+                        <button onClick={() => handleOperation('add')}>Add</button>
+                        <button onClick={() => handleOperation('subtract')}>Subtract</button>
+                        <button onClick={() => handleOperation('multiply')}>Multiply</button>
+                        <button onClick={() => handleOperation('divide')}>Divide</button>
+                    </div>
+                </div>
+
+                {result !== null && <div>Result: {result}</div>}
             </div>
-            <div>
-                <button onClick={() => handleOperation('add')}>Add</button>
-                <button onClick={() => handleOperation('subtract')}>Subtract</button>
-                <button onClick={() => handleOperation('multiply')}>Multiply</button>
-                <button onClick={() => handleOperation('divide')}>Divide</button>
-            </div>
-            {result !== null && <div>Result: {result}</div>}
         </div>
     );
 };

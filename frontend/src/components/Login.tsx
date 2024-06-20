@@ -24,26 +24,30 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     return (
         <div>
             <Header />
-            <form onSubmit={handleSubmit}>
+            <div className="center-container">
                 <div>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label>Username:</label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label>Password:</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                    <Link to="/register">Don't have an account? Register here</Link>
                 </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <Link to="/register">Don't have an account? Register here</Link>
+            </div>
         </div>
     );
 };
