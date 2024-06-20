@@ -27,7 +27,7 @@ export class AuthService {
         const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });
         await this.saveToken(user.id, token);
 
-        return `Bearer ${token}`;
+        return token;
     }
 
     private async saveToken(userId: number, token: string): Promise<void> {
